@@ -10,6 +10,20 @@
 
 
  WINDOW *big_window;
+ 
+// nasza funkcja dostosowujeca rozmiar
+
+void handle_winch(int sig){
+  signal(SIGWINCH, SIG_IGN);
+
+  endwin();
+  initscr();
+  refresh();
+  clear();
+
+  signal(SIGWINCH, handle_winch);
+}
+
 
 
  void clean(void)
@@ -34,7 +48,7 @@
    refresh();
    
    curs_set(0);
-   big_window = newwin(25, 80, 0, 0);      
+   big_window = newwin(LINES, COLS, 0, 0);      
 
    wattron(big_window, COLOR_PAIR(1));
 
@@ -105,7 +119,7 @@
         {
             case KEY_DOWN:
                 y +=1;
-                if( y > 23) y = 23;
+                if( y > LINES -2 ) y = LINES - 2;
                 break;
             case KEY_UP:
                 y -=1;
@@ -117,7 +131,7 @@
                 break;
             case KEY_RIGHT:
                 x +=1;
-                if( x > 78 ) x = 78;
+                if( x > COLS - 2 ) x = COLS - 2;
                 break;
         }
 
